@@ -1,11 +1,11 @@
 use common::sense;
 
 use SDR;
+use SDR::DSP;
 
 use PDL;
 use PDL::Complex;
 use PDL::Constants qw(PI);
-use PDL::DSP::Fir::Simple;
 
 
 my $freq = shift || 104.5;
@@ -44,11 +44,8 @@ $radio->rx(sub {
 
   ## Decimate 4:1, 2000k -> 500k
 
-  $I = PDL::DSP::Fir::Simple::filter($I, { fc => 0.12, N => 81, });
-  $Q = PDL::DSP::Fir::Simple::filter($Q, { fc => 0.12, N => 81, });
-
-  $I = $I->slice([0,-1,4]);
-  $Q = $Q->slice([0,-1,4]);
+  $I = SDR::DSP::decimate($I, 4, { fc => 0.12, N => 30, });
+  $Q = SDR::DSP::decimate($Q, 4, { fc => 0.12, N => 30, });
 
 
   ## Demod
@@ -63,9 +60,8 @@ $radio->rx(sub {
 
   ## Decimate 10:1, 500k -> 50k
 
-  my $audio = PDL::DSP::Fir::Simple::filter($deriv, { fc => 0.4, N => 32 });
+  my $audio = SDR::DSP::decimate($deriv, 10, { fc => 0.4, N => 20 });
 
-  $audio = $audio->slice([0,-1,10]);
 
   print $audio_sink ${ $audio->convert(float)->get_dataref };
 });
