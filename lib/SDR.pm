@@ -151,11 +151,10 @@ L<SDR::Radio::RTLSDR> - Can only receive.
 
 =head1 SEE ALSO
 
-L<SDR-Radio-HackRF github repo|https://github.com/hoytech/SDR-Radio-HackRF>
+L<SDR github repo|https://github.com/hoytech/SDR>
 
 The examples in the C<ex/> directory of this distribution.
 
-L<SDR> - The main module, includes examples
 
 =head1 AUTHOR
 
